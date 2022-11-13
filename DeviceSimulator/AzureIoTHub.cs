@@ -50,11 +50,11 @@ namespace DeviceSimulator
 
             while (!cancelToken.IsCancellationRequested)
             {
-                double currentTemperature = avgPower + rand.NextDouble() * 4 - 3;
+                double currentPower = avgPower + rand.NextDouble() * 4 - 3;
 
                 var telemetryDataPoint = new
                 {
-                    Temperature = currentTemperature
+                    Power = currentPower
                 };
                 var messageString = JsonSerializer.Serialize(telemetryDataPoint);
                 var message = new Microsoft.Azure.Devices.Client.Message(Encoding.UTF8.GetBytes(messageString))
@@ -64,6 +64,7 @@ namespace DeviceSimulator
                 };
                 await deviceClient.SendEventAsync(message);
                 Console.WriteLine($"{DateTime.Now} > Sending message: {messageString}");
+              // Console.WriteLine($"{DateTime.Now} > Sending message: Power"+ currentTemperature);
                 
                 //Keep this value above 1000 to keep a safe buffer above the ADT service limits
                 //See https://aka.ms/adt-limits for more info
